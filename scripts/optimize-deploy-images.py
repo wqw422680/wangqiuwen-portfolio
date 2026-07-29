@@ -11,4 +11,9 @@ for path in (ROOT / "dist").rglob("*.png"):
         image.thumbnail((640, 800), Image.Resampling.LANCZOS)
         if image.mode not in ("RGB", "RGBA"):
             image = image.convert("RGBA")
-        image.save(path, optimize=True, compress_level=9)
+        image.save(path.with_suffix(".webp"), "WEBP", quality=78, method=4)
+    path.unlink()
+
+for path in (ROOT / "dist").rglob("*"):
+    if path.suffix in {".js", ".css", ".html"}:
+        path.write_text(path.read_text().replace(".png", ".webp"))
